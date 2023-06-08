@@ -12,6 +12,7 @@ import com.autobots.automanager.service.VendaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class MercadoriaControler {
 	private AdicionadorLinkMercadoria adicionadorLinkMercadoria;
 	
 	@PostMapping("/cadastrar/{id}")
+	@PreAuthorize("hasAnyAuthority('ROLE_GERENTE') or hasAnyAuthority('ROLE_ADMIN')")
 	public ResponseEntity<?> cadastrar(@RequestBody Mercadoria mercadoria, @PathVariable Long id){
 		
 		Long idMercadoria = mercadoriaService.create(mercadoria);
@@ -61,6 +63,7 @@ public class MercadoriaControler {
 	}
 	
 	@GetMapping("/buscar")
+	@PreAuthorize("hasAnyAuthority('ROLE_GERENTE') or hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_VENDEDOR')")
 	public ResponseEntity<List<Mercadoria>> buscarTodos(){
 		List<Mercadoria> mercadoria = mercadoriaService.findAll();
 		if(mercadoria.isEmpty()) {
@@ -71,6 +74,7 @@ public class MercadoriaControler {
 	}
 	
 	@GetMapping("/buscar/{id}")
+	@PreAuthorize("hasAnyAuthority('ROLE_GERENTE') or hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_VENDEDOR')")
 	public ResponseEntity<Mercadoria> buscarPorId(@PathVariable Long id){
 		Mercadoria mercadoria = mercadoriaService.findById(id);
 		HttpStatus status = HttpStatus.CONFLICT;
@@ -85,6 +89,7 @@ public class MercadoriaControler {
 	}
 	
 	@PutMapping("/atualizar/{id}")
+	@PreAuthorize("hasAnyAuthority('ROLE_GERENTE') or hasAnyAuthority('ROLE_ADMIN')")
 	public ResponseEntity<?> atualizarMercadoria(@RequestBody Mercadoria mercadoria, @PathVariable Long id){
 		Mercadoria mercadoriaExistente  = mercadoriaService.findById(id);
 		if (mercadoriaExistente == null) {
@@ -97,6 +102,7 @@ public class MercadoriaControler {
 	}
 	
 	@DeleteMapping("/deletar/{id}")
+	@PreAuthorize("hasAnyAuthority('ROLE_GERENTE') or hasAnyAuthority('ROLE_ADMIN')")
 	public ResponseEntity<?> deletar(@PathVariable Long id){
 		Mercadoria mercadoriaSelecionada = mercadoriaService.findById(id);
 	

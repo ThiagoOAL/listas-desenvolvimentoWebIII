@@ -101,7 +101,7 @@ public class AutomanagerApplication{
 			Usuario funcionario = new Usuario();
 			funcionario.setNome("Pedro Alcântara de Bragança e Bourbon");
 			funcionario.setNomeSocial("Dom Pedro");
-			funcionario.getPerfis().add(PerfilUsuario.FUNCIONARIO);
+			funcionario.getPerfis().add(PerfilUsuario.ROLE_GERENTE);
 
 			Email emailFuncionario = new Email();
 			emailFuncionario.setEndereco("a@a.com");
@@ -145,7 +145,7 @@ public class AutomanagerApplication{
 			Usuario fornecedor = new Usuario();
 			fornecedor.setNome("Componentes varejo de partes automotivas ltda");
 			fornecedor.setNomeSocial("Loja do carro, vendas de componentes automotivos");
-			fornecedor.getPerfis().add(PerfilUsuario.FORNECEDOR);
+			fornecedor.getPerfis().add(PerfilUsuario.ROLE_CLIENTE);
 
 			Email emailFornecedor = new Email();
 			emailFornecedor.setEndereco("f@f.com");
@@ -196,7 +196,7 @@ public class AutomanagerApplication{
 			Usuario cliente2 = new Usuario();
 			cliente2.setNome("Pedro Alcântara de Bragança e Bourbon");
 			cliente2.setNomeSocial("Dom pedro cliente");
-			cliente2.getPerfis().add(PerfilUsuario.CLIENTE);
+			cliente2.getPerfis().add(PerfilUsuario.ROLE_CLIENTE);
 
 			Email emailCliente = new Email();
 			emailCliente.setEndereco("c@c.com");

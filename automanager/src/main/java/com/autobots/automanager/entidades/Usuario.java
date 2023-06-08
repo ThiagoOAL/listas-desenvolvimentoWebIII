@@ -1,27 +1,22 @@
 package com.autobots.automanager.entidades;
 
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import jakarta.persistence.*;
 import com.autobots.automanager.enums.PerfilUsuario;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Data
 @EqualsAndHashCode(exclude = { "mercadorias", "vendas", "veiculos" })
 @Entity
-public class Usuario extends RepresentationModel<Usuario> {
+public class Usuario implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -47,4 +42,39 @@ public class Usuario extends RepresentationModel<Usuario> {
 	private Set<Venda> vendas = new HashSet<>();
 	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
 	private Set<Veiculo> veiculos = new HashSet<>();
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority(PerfilUsuario.values().toString()));
+	}
+
+	@Override
+	public String getPassword() {
+		return credenciais.toString();
+	}
+
+	@Override
+	public String getUsername() {
+		return nome;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 }

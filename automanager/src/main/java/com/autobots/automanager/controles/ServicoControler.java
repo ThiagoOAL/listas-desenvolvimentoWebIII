@@ -9,6 +9,7 @@ import com.autobots.automanager.service.VendaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class ServicoControler {
 	private com.autobots.automanager.link.AdicionadorLinkServico adicionadorLinkServico;
 	
 	@PutMapping("/atualizar/{id}")
+	@PreAuthorize("hasAnyAuthority('ROLE_GERENTE') or hasAnyAuthority('ROLE_ADMIN')")
 	public ResponseEntity<?> atualizar(@RequestBody Servico servico , @PathVariable Long id){
 		Servico serv = servicoService.findById(id);
 		if(serv == null) {
@@ -41,6 +43,7 @@ public class ServicoControler {
 	}
 	
 	@PostMapping("/cadastrar/{id}")
+	@PreAuthorize("hasAnyAuthority('ROLE_GERENTE') or hasAnyAuthority('ROLE_ADMIN')")
 	public ResponseEntity<?> cadastrar(@RequestBody Servico servico, @PathVariable Long id ){
 	Empresa empresa = empresaService.findById(id);
 	if (empresa == null) {
@@ -52,6 +55,7 @@ public class ServicoControler {
 	}
 	
 	@GetMapping("/buscar")
+	@PreAuthorize("hasAnyAuthority('ROLE_GERENTE') or hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_VENDEDOR')")
 	public ResponseEntity<List<Servico>> buscarTodos(){
 		List<Servico> servicos = servicoService.findAll();
 		adicionadorLinkServico.adicionarLink(servicos);
@@ -59,6 +63,7 @@ public class ServicoControler {
 	}
 	
 	@GetMapping("/buscar/{id}")
+	@PreAuthorize("hasAnyAuthority('ROLE_GERENTE') or hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_VENDEDOR')")
 	public ResponseEntity<Servico> buscarPorId(@PathVariable Long id){
 		Servico servico = servicoService.findById(id);
 		HttpStatus status = HttpStatus.CONFLICT;
@@ -72,6 +77,7 @@ public class ServicoControler {
 	}	
 	
 	@DeleteMapping("/deletar/{id}")
+	@PreAuthorize("hasAnyAuthority('ROLE_GERENTE') or hasAnyAuthority('ROLE_ADMIN')")
 	public ResponseEntity<?> deletar(@PathVariable Long id){
 		Servico servicoSelecionado = servicoService.findById(id);
 		

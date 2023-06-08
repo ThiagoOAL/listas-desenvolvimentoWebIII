@@ -12,6 +12,7 @@ import com.autobots.automanager.service.VendaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,6 +39,7 @@ public class VendaControler {
 	private AdicionadorLinkVenda linkVenda;
 	
 	@PostMapping("/cadastrar/{id}")
+	@PreAuthorize("hasAnyAuthority('ROLE_GERENTE') or hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_VENDEDOR')")
 	public ResponseEntity<?> cadastrar(@RequestBody Venda venda, @PathVariable Long id){
 		Empresa empresaSelecionada = empresaService.findById(id);
 		if(empresaSelecionada == null) {
@@ -61,6 +63,7 @@ public class VendaControler {
 	
 	
 	@GetMapping("/buscar")
+	@PreAuthorize("hasAnyAuthority('ROLE_GERENTE') or hasAnyAuthority('ROLE_ADMIN')")
 	public ResponseEntity<List<Venda>> buscarTodos(){
 		List<Venda> venda = vendaService.findAll();
 		linkVenda.adicionarLink(venda);
@@ -68,6 +71,7 @@ public class VendaControler {
 	}
 	
 	@GetMapping("/buscar/{id}")
+	@PreAuthorize("hasAnyAuthority('ROLE_GERENTE') or hasAnyAuthority('ROLE_ADMIN') or hasAnyAuthority('ROLE_VENDEDOR') or hasAnyAuthority('ROLE_CLIENTE')")
 	public ResponseEntity<Venda> buscarPorId(@PathVariable Long id){
 		Venda venda = vendaService.findById(id);
 		HttpStatus status = HttpStatus.CONFLICT;
@@ -81,6 +85,7 @@ public class VendaControler {
 	}
 
 	@PutMapping("/atualizar/{id}")
+	@PreAuthorize("hasAnyAuthority('ROLE_GERENTE') or hasAnyAuthority('ROLE_ADMIN')")
 		public ResponseEntity<?> atualizarVenda (@RequestBody Venda venda, @PathVariable Long id){
 			Venda vendaExistente = vendaService.findById(id);
 			if (vendaExistente == null) {
