@@ -9,7 +9,7 @@ public class DocumentoAtualizador {
 
 	public void atualizar(Documento documento, Documento atualizacao) {
 		if (atualizacao != null) {
-			if (!verificador.verificar(atualizacao.getTipo())) {
+			if (!verificador.verificar(atualizacao.getTipo().toString())) {
 				documento.setTipo(atualizacao.getTipo());
 			}
 			if (!verificador.verificar(atualizacao.getNumero())) {
